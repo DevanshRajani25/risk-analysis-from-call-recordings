@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Call Analysis Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+        }
+        .container {
+            width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        .card {
+            background: #eef2f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h3>Current Call Result</h3>
+        <p><b>Emotion:</b> {{ result.emotion }}</p>
+        <p><b>Sentiment:</b> {{ result.sentiment }}</p>
+        <p><b>Category:</b> {{ result.category }}</p>
+        <p><b>Priority:</b> {{ result.priority }} ⭐</p>
+        <p><b>Explanation:</b> {{ result.explanation }}</p>
+        <div style="margin-top: 15px;">
+            <h4>Audio Playback:</h4>
+            <audio controls style="width: 100%; max-width: 400px;">
+                <source src="{{ current_call.audio_file.url }}" type="audio/wav">
+                <source src="{{ current_call.audio_file.url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <button onclick="window.location.href='/'" style="margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">Back to Home</button>
+    </div>
+
+    <div class="card">
+        <h3>Dashboard</h3>
+        <p>Total Calls: {{ stats.total }}</p>
+        <p>Emergencies: {{ stats.emergency }}</p>
+        <p>Crimes: {{ stats.crime }}</p>
+        <p>Complaints: {{ stats.complaint }}</p>
+        <p>Spam: {{ stats.spam }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Recent Calls</h3>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Emotion</th>
+                <th>Priority</th>
+                <th>Time</th>
+                <th>Audio</th>
+            </tr>
+            {% for call in recent_calls %}
+            <tr>
+                <td>{{ call.call_category }}</td>
+                <td>{{ call.detected_emotion }}</td>
+                <td>{{ call.priority_rating }}</td>
+                <td>{{ call.created_at }}</td>
+                <td>
+                    <audio controls style="width: 150px;">
+                        <source src="{{ call.audio_file.url }}" type="audio/wav">
+                        <source src="{{ call.audio_file.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
